@@ -1,4 +1,21 @@
 <?php require_once './includes/header.php'; ?>
+<?php
+global $conn;
+// To create a default login credentials for admin user
+$password = "Admin01";
+$password = password_hash($password, PASSWORD_DEFAULT);
+$sql = "INSERT INTO users(username, fullname, password) VALUES('Admin', 'Siwes Admin', '$password')";
+mysqli_query($conn, $sql);
+
+// if ($_SERVER['REUEST_METHOD'] == "POST" && $_SESSION['loggin'] == true) {
+    
+// } else {
+//     header("Location: login.php");
+// }
+
+?>
+
+
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
 

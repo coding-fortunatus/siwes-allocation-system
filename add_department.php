@@ -1,3 +1,9 @@
+<?php
+
+$departments = $department_code = $success = "";
+$department_error = $department_code_error = $dept_error = $file_error = "";
+?>
+
 <?php require_once './includes/header.php'; ?>
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
@@ -146,13 +152,64 @@
 
     <section class="section dashboard">
         <div class="row">
-
             <!-- Left side columns -->
             <div class="col-lg-12">
                 <div class="row">
-                </div>
-            </div><!-- End Left side columns -->
-        </div>
+                    <div class="col-md-5">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+                                    <div class="pt-4 pb-2">
+                                        <h5 class="card-title text-center pb-0 fs-4">Add Single Department</h5>
+                                        <p class="text-warning text-center small">Supply all information
+                                            correctly</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="deptsname" class="form-label">Department Name</label>
+                                        <input type="text" class="form-control mb-3" name="department_name"
+                                            id="deptsname">
+                                        <span class="text-danger"><?php echo $department_error; ?></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="deptscode" class="form-label">Department Code</label>
+                                        <input type="text" class="form-control mb-3" name="department_code"
+                                            id="deptscode">
+                                        <span class="text-danger"><?php echo $department_code_error; ?></span>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <input class="btn btn-primary w-100" type="submit" name="single_department"
+                                            value="Add Department">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <h3 class="h4">OR</h3>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+                                    <div class="pt-4 pb-2">
+                                        <h5 class="card-title text-center pb-0 fs-4">Upload all Departments</h5>
+                                        <p class="text-warning text-center small">Allowed filetype is CSV</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dptfile" class="form-label">Add Department File</label>
+                                        <input type="file" class="form-control mb-3" name="departments" id="dptfile">
+                                        <span class="text-danger"><?php echo $file_error; ?></span>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <input class="btn btn-primary w-100" type="submit" name="upload_department"
+                                            value="Upload Departments">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Left side columns -->
+            </div>
     </section>
 </main><!-- End #main -->
 <?php require_once './includes/footer.php'; ?>
