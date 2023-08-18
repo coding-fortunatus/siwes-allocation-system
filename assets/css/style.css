@@ -903,49 +903,6 @@ h6 {
 	margin-left: 95px;
 }
 
-/* Recent Sales */
-.dashboard .recent-sales {
-	font-size: 14px;
-}
-
-.dashboard .recent-sales .table thead {
-	background: #f6f6fe;
-}
-
-.dashboard .recent-sales .table thead th {
-	border: 0;
-}
-
-.dashboard .recent-sales .dataTable-top {
-	padding: 0 0 10px 0;
-}
-
-.dashboard .recent-sales .dataTable-bottom {
-	padding: 10px 0 0 0;
-}
-
-/* Top Selling */
-.dashboard .top-selling {
-	font-size: 14px;
-}
-
-.dashboard .top-selling .table thead {
-	background: #f6f6fe;
-}
-
-.dashboard .top-selling .table thead th {
-	border: 0;
-}
-
-.dashboard .top-selling .table tbody td {
-	vertical-align: middle;
-}
-
-.dashboard .top-selling img {
-	border-radius: 5px;
-	max-width: 60px;
-}
-
 /*--------------------------------------------------------------
 # Icons list page
 --------------------------------------------------------------*/
@@ -1037,130 +994,6 @@ h6 {
 }
 
 /*--------------------------------------------------------------
-# F.A.Q Page
---------------------------------------------------------------*/
-.faq .basic h6 {
-	font-size: 18px;
-	font-weight: 600;
-	color: #4154f1;
-}
-
-.faq .basic p {
-	color: #6980aa;
-}
-
-/*--------------------------------------------------------------
-# Contact
---------------------------------------------------------------*/
-.contact .info-box {
-	padding: 28px 30px;
-}
-
-.contact .info-box i {
-	font-size: 38px;
-	line-height: 0;
-	color: #4154f1;
-}
-
-.contact .info-box h3 {
-	font-size: 20px;
-	color: #012970;
-	font-weight: 700;
-	margin: 20px 0 10px 0;
-}
-
-.contact .info-box p {
-	padding: 0;
-	line-height: 24px;
-	font-size: 14px;
-	margin-bottom: 0;
-}
-
-.contact .php-email-form .error-message {
-	display: none;
-	color: #fff;
-	background: #ed3c0d;
-	text-align: left;
-	padding: 15px;
-	margin-bottom: 24px;
-	font-weight: 600;
-}
-
-.contact .php-email-form .sent-message {
-	display: none;
-	color: #fff;
-	background: #18d26e;
-	text-align: center;
-	padding: 15px;
-	margin-bottom: 24px;
-	font-weight: 600;
-}
-
-.contact .php-email-form .loading {
-	display: none;
-	background: #fff;
-	text-align: center;
-	padding: 15px;
-	margin-bottom: 24px;
-}
-
-.contact .php-email-form .loading:before {
-	content: "";
-	display: inline-block;
-	border-radius: 50%;
-	width: 24px;
-	height: 24px;
-	margin: 0 10px -6px 0;
-	border: 3px solid #18d26e;
-	border-top-color: #eee;
-	animation: animate-loading 1s linear infinite;
-}
-
-.contact .php-email-form input,
-.contact .php-email-form textarea {
-	border-radius: 0;
-	box-shadow: none;
-	font-size: 14px;
-	border-radius: 0;
-}
-
-.contact .php-email-form input:focus,
-.contact .php-email-form textarea:focus {
-	border-color: #4154f1;
-}
-
-.contact .php-email-form input {
-	padding: 10px 15px;
-}
-
-.contact .php-email-form textarea {
-	padding: 12px 15px;
-}
-
-.contact .php-email-form button[type="submit"] {
-	background: #4154f1;
-	border: 0;
-	padding: 10px 30px;
-	color: #fff;
-	transition: 0.4s;
-	border-radius: 4px;
-}
-
-.contact .php-email-form button[type="submit"]:hover {
-	background: #5969f3;
-}
-
-@keyframes animate-loading {
-	0% {
-		transform: rotate(0deg);
-	}
-
-	100% {
-		transform: rotate(360deg);
-	}
-}
-
-/*--------------------------------------------------------------
 # Error 404
 --------------------------------------------------------------*/
 .error-404 {
@@ -1218,4 +1051,94 @@ h6 {
 	text-align: center;
 	font-size: 13px;
 	color: #012970;
+}
+
+/* Table customizations */
+.wrapper {
+	margin-top: 5vh;
+}
+.dataTables_filter {
+	float: right;
+}
+.table-hover > tbody > tr:hover {
+	background-color: #ccffff;
+}
+@media only screen and (min-width: 768px) {
+	.table {
+		table-layout: fixed;
+		max-width: 100% !important;
+	}
+}
+thead {
+	background: #ddd;
+}
+.table td:nth-child(2) {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.highlight {
+	background: #ffff99;
+}
+@media only screen and (max-width: 767px) {
+	/* Force table to not be like tables anymore */
+	table,
+	thead,
+	tbody,
+	th,
+	td,
+	tr {
+		display: block;
+	}
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr,
+	tfoot tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	td {
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		padding-left: 50% !important;
+	}
+	td:before {
+		/* Now like a table header */
+		position: absolute; /* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: nowrap;
+	}
+	.table td:nth-child(1) {
+		background: #ccc;
+		height: 100%;
+		top: 0;
+		left: 0;
+		font-weight: bold;
+	}
+	/*  Label the data  */
+	td:nth-of-type(1):before {
+		content: "Name";
+	}
+	td:nth-of-type(2):before {
+		content: "Position";
+	}
+	td:nth-of-type(3):before {
+		content: "Office";
+	}
+	td:nth-of-type(4):before {
+		content: "Age";
+	}
+	td:nth-of-type(5):before {
+		content: "Start date";
+	}
+	td:nth-of-type(6):before {
+		content: "Salary";
+	}
+	.dataTables_length {
+		display: none;
+	}
 }

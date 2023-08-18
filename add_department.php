@@ -16,32 +16,19 @@ $department_error = $department_code_error = $dept_error = $file_error = "";
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
-    <div class="search-bar">
-        <form class="search-form d-flex align-items-center" method="POST" action="#">
-            <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-            <!-- <button type="submit" title="Search"><i class="bi bi-search"></i></button> -->
-        </form>
-    </div><!-- End Search Bar -->
-
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
-
-            <li class="nav-item d-block d-lg-none">
-                <a class="nav-link nav-icon search-bar-toggle " href="#">
-                    <i class="bi bi-search"></i>
-                </a>
-            </li><!-- End Search Icon-->
 
             <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                     <img src="assets/img/profile-img.png" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                    <span class="d-none d-md-block dropdown-toggle ps-2">Computer Science</span>
                 </a><!-- End Profile Iamge Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
-                        <h6>Kevin Anderson</h6>
+                        <h6>Administrator</h6>
                         <span>SIWES Manager</span>
                     </li>
                     <li>
@@ -164,6 +151,7 @@ $department_error = $department_code_error = $dept_error = $file_error = "";
                                         <p class="text-warning text-center small">Supply all information
                                             correctly</p>
                                     </div>
+                                    <span class="text-success"><?php echo $success; ?></span>
                                     <div class="form-group">
                                         <label for="deptsname" class="form-label">Department Name</label>
                                         <input type="text" class="form-control mb-3" name="department_name"
@@ -185,9 +173,9 @@ $department_error = $department_code_error = $dept_error = $file_error = "";
                         </div>
                     </div>
                     <div class="col-md-1">
-                        <h3 class="h4">OR</h3>
+                        <h3 class="h3 ">OR</h3>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <div class="card mb-3">
                             <div class="card-body">
                                 <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
@@ -195,6 +183,7 @@ $department_error = $department_code_error = $dept_error = $file_error = "";
                                         <h5 class="card-title text-center pb-0 fs-4">Upload all Departments</h5>
                                         <p class="text-warning text-center small">Allowed filetype is CSV</p>
                                     </div>
+                                    <span class="text-success"><?php echo $success; ?></span>
                                     <div class="form-group">
                                         <label for="dptfile" class="form-label">Add Department File</label>
                                         <input type="file" class="form-control mb-3" name="departments" id="dptfile">
