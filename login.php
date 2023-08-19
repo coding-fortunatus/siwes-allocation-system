@@ -63,12 +63,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])){
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
             }
-
             // Close statement
             mysqli_stmt_close($stmt);
         }
     }
-    
     // Close connection
     mysqli_close($conn);
 }

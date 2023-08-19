@@ -1,7 +1,50 @@
 <?php
+global $conn;
+$departments = $department_code = $department_name = $single_department = $single_dpt_err = $single_dpt_successs ="";
+$department_name_error = $department_code_error = $dept_error = $file_error = "";
 
-$departments = $department_code = $success = "";
-$department_error = $department_code_error = $dept_error = $file_error = "";
+function validate_input($data) {
+    stripslashes($data);
+    htmlspecialchars($data);
+    trim($data);
+    return $data;
+}
+
+if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['single_department'])) {
+    if (empty($_POST['department_name'])) {
+        $department_name_error = "This field is required";
+    } else {
+        $department_name = validate_input($_POST['department_name']);
+    }
+
+    if (empty($_POST['department_code'])) {
+        $department_code_error = "This field is required";
+    } else {
+        $department_code = validate_input($_POST['department_code']);
+    }
+
+    if (empty($department_code_error) && empty($department_name_error)) {
+        $sql = "SELECT * FROM departments WHERE department_name = '$department_name'";
+        $query_string = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($query_string) > 0) {
+            $update_query = "UPDATE departments SET department_code = '$department_code'";
+            if (mysqli_query($conn, $update_query)) {
+                $single_department = "Department successfully updated";
+            } else {
+                $single_dpt_err = "Oops, an error occured while updating data";
+            }
+        } else {
+            $query = "INSERT INTO departments(department_name, department_code) VALUES(?, ?)";
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "ss", $department_name, $department_code);
+            if (mysqli_stmt_execute($stmt)) {
+                $single_department = "Department successfully added";
+            } else {
+                $single_dpt_err = "An erorr occur while adding data";
+            }
+        }
+    }
+}
 ?>
 
 <?php require_once './includes/header.php'; ?>
@@ -151,22 +194,21 @@ $department_error = $department_code_error = $dept_error = $file_error = "";
                                         <p class="text-warning text-center small">Supply all information
                                             correctly</p>
                                     </div>
-                                    <span class="text-success"><?php echo $success; ?></span>
-                                    <div class="form-group">
+                                    <span class="text-success"><?php echo $single_department; ?></span>
+                                    <span class="text-danger"><?php echo $single_dpt_err; ?></span>
+                                    <div class="form-group mb-3">
                                         <label for="deptsname" class="form-label">Department Name</label>
-                                        <input type="text" class="form-control mb-3" name="department_name"
-                                            id="deptsname">
-                                        <span class="text-danger"><?php echo $department_error; ?></span>
+                                        <input type="text" class="form-control" name="department_name" id="deptsname">
+                                        <span class="text-danger"><?php echo $department_name_error; ?></span>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group mb-3">
                                         <label for="deptscode" class="form-label">Department Code</label>
-                                        <input type="text" class="form-control mb-3" name="department_code"
-                                            id="deptscode">
+                                        <input type="text" class="form-control" name="department_code" id="deptscode">
                                         <span class="text-danger"><?php echo $department_code_error; ?></span>
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <input class="btn btn-primary w-100" type="submit" name="single_department"
-                                            value="Add Department">
+                                        <input class="btn btn-outline-primary w-100" type="submit"
+                                            name="single_department" value="Add Department">
                                     </div>
                                 </form>
                             </div>
@@ -183,15 +225,16 @@ $department_error = $department_code_error = $dept_error = $file_error = "";
                                         <h5 class="card-title text-center pb-0 fs-4">Upload all Departments</h5>
                                         <p class="text-warning text-center small">Allowed filetype is CSV</p>
                                     </div>
-                                    <span class="text-success"><?php echo $success; ?></span>
-                                    <div class="form-group">
+                                    <span class="text-success"><?php ?></span>
+                                    <span class="text-danger"><?php ?></span>
+                                    <div class="form-group mb-3">
                                         <label for="dptfile" class="form-label">Add Department File</label>
-                                        <input type="file" class="form-control mb-3" name="departments" id="dptfile">
+                                        <input type="file" class="form-control" name="departments" id="dptfile">
                                         <span class="text-danger"><?php echo $file_error; ?></span>
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <input class="btn btn-primary w-100" type="submit" name="upload_department"
-                                            value="Upload Departments">
+                                        <input class="btn btn-outline-primary w-100" type="submit"
+                                            name="upload_department" value="Upload Departments">
                                     </div>
                                 </form>
                             </div>
