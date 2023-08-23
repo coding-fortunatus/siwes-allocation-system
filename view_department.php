@@ -1,4 +1,10 @@
-<?php require_once './includes/header.php'; ?>
+<?php 
+require_once './includes/header.php';
+require_once './includes/functions.php';
+
+$departments = getDepartments();
+
+?>
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -39,7 +45,8 @@
             </li><!-- End Profile Nav -->
 
         </ul>
-    </nav><!-- End Icons Navigation -->
+    </nav>
+    <!-- End Icons Navigation -->
 
 </header><!-- End Header -->
 
@@ -140,24 +147,23 @@
                     <table id="example" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th style="width: 10px;">#</th>
                                 <th>Department Name</th>
                                 <th>Department Code</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                                <th>action</th>
+                                <th style="width: 30px;">Edit</th>
+                                <th style="width: 50px;">Delete</th>
+                                <th style="width: 50px;">action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php 
-                            $a =20;
-                            for ($i=1; $i <= $a; $i++) { 
+                            foreach($departments as $department) {
                                 echo ' <tr>
-                                <td>'.$i.'</td>
-                                <td>Computer Science</td>
-                                <td>CS</td>
-                                <td><a class="btn btn-outline-primary" href="departmemt.php?edit='.$i.'">Edit</a></td>
-                                <td><a class="btn btn-outline-danger" href="departmemt.php?delete='.$i.'">Delete</a></td>
+                                <td>'.$department['id'].'</td>
+                                <td>'.$department['department_name'].'</td>
+                                <td>'.$department['department_code'].'</td>
+                                <td><a class="btn btn-outline-primary" href="departmemt.php?edit='.$department['id'].'">Edit</a></td>
+                                <td><a class="btn btn-outline-danger" href="departmemt.php?delete='.$department['id'].'">Delete</a></td>
                                 <td></td>
                             </tr>';
                             }
@@ -166,7 +172,8 @@
                         </tbody>
                     </table>
                 </div>
-            </div><!-- End Left side columns -->
+            </div>
+            <!-- End Left side columns -->
         </div>
     </section>
 </main><!-- End #main -->

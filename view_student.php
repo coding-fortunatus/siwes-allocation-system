@@ -1,4 +1,9 @@
-<?php require_once './includes/header.php'; ?>
+<?php 
+require_once './includes/header.php'; 
+require_once './includes/functions.php';
+
+$students = getStudents()
+?>
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -10,32 +15,19 @@
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
-    <div class="search-bar">
-        <form class="search-form d-flex align-items-center" method="POST" action="#">
-            <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-            <!-- <button type="submit" title="Search"><i class="bi bi-search"></i></button> -->
-        </form>
-    </div><!-- End Search Bar -->
-
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
-
-            <li class="nav-item d-block d-lg-none">
-                <a class="nav-link nav-icon search-bar-toggle " href="#">
-                    <i class="bi bi-search"></i>
-                </a>
-            </li><!-- End Search Icon-->
 
             <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                     <img src="assets/img/profile-img.png" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                    <span class="d-none d-md-block dropdown-toggle ps-2">Computer Science</span>
                 </a><!-- End Profile Iamge Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
-                        <h6>Kevin Anderson</h6>
+                        <h6>Administrator</h6>
                         <span>SIWES Manager</span>
                     </li>
                     <li>
@@ -52,7 +44,8 @@
             </li><!-- End Profile Nav -->
 
         </ul>
-    </nav><!-- End Icons Navigation -->
+    </nav>
+    <!-- End Icons Navigation -->
 
 </header><!-- End Header -->
 
@@ -135,7 +128,7 @@
 <main id="main" class="main">
 
     <div class="pagetitle">
-        <h1>Lecturer</h1>
+        <h1>Students</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.php">Home</a></li>
@@ -150,9 +143,62 @@
             <!-- Left side columns -->
             <div class="col-lg-12">
                 <div class="row">
+                    <table id="example" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px;">#</th>
+                                <th style="width: auto;">Matric Number</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th style="width: 30px;">Edit</th>
+                                <th style="width: 50px;">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            foreach($students as $student) {
+                                echo ' <tr>
+                                <td>'.$student['id'].'</td>
+                                <td>'.$student['matric_number'].'</td>
+                                <td>'.$student['fullname'].'</td>
+                                <td>'.$student['email'].'</td>
+                                <td><a class="btn btn-outline-primary" href="departmemt.php?edit='.$student['id'].'">Edit</a></td>
+                                <td><a class="btn btn-outline-danger" href="departmemt.php?delete='.$student['id'].'">Delete</a></td>
+                            </tr>';
+                            }
+                                
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
-            </div><!-- End Left side columns -->
+            </div>
+            <!-- End Left side columns -->
         </div>
     </section>
 </main><!-- End #main -->
+<script>
+$(document).ready(function() {
+    $('#example')
+        .DataTable({
+            //disable sorting on last column      
+            "columnDefs": [{
+                "orderable": false,
+                "targets": 5
+            }],
+            language: {
+                //customize pagination prev and next buttons: use arrows instead of words        
+                'paginate': {
+                    'previous': '<span class="fa fa-chevron-left"></span>',
+                    'next': '<span class="fa fa-chevron-right"></span>'
+                },
+                //customize number of elements to be displayed        
+                "lengthMenu": 'Display <select class="form-control input-sm">' +
+                    '<option value="10">10</option>' + '<option value="20">20</option>' +
+                    '<option value="30">30</option>' + '<option value="40">40</option>' +
+                    '<option value="50">50</option>' + '<option value="-1">All</option>' +
+                    '</select> results'
+            }
+        })
+});
+</script>
 <?php require_once './includes/footer.php'; ?>

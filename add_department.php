@@ -1,14 +1,9 @@
 <?php
-global $conn;
+require_once "./includes/dbh.php";
+require_once "./includes/functions.php";
+// global $conn;
 $departments = $department_code = $department_name = $single_department = $single_dpt_err = $single_dpt_successs ="";
 $department_name_error = $department_code_error = $dept_error = $file_error = "";
-
-function validate_input($data) {
-    stripslashes($data);
-    htmlspecialchars($data);
-    trim($data);
-    return $data;
-}
 
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['single_department'])) {
     if (empty($_POST['department_name'])) {
@@ -27,22 +22,69 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['single_department'])) 
         $sql = "SELECT * FROM departments WHERE department_name = '$department_name'";
         $query_string = mysqli_query($conn, $sql);
         if (mysqli_num_rows($query_string) > 0) {
-            $update_query = "UPDATE departments SET department_code = '$department_code'";
-            if (mysqli_query($conn, $update_query)) {
-                $single_department = "Department successfully updated";
-            } else {
-                $single_dpt_err = "Oops, an error occured while updating data";
-            }
+            $single_dpt_err = "Department already exists";
         } else {
-            $query = "INSERT INTO departments(department_name, department_code) VALUES(?, ?)";
-            $stmt = mysqli_prepare($conn, $sql);
-            mysqli_stmt_bind_param($stmt, "ss", $department_name, $department_code);
-            if (mysqli_stmt_execute($stmt)) {
+            $query = "INSERT INTO departments(department_name, department_code)VALUES('$department_name', '$department_code')";
+            if (mysqli_query($conn, $query)) {
                 $single_department = "Department successfully added";
             } else {
                 $single_dpt_err = "An erorr occur while adding data";
             }
         }
+    }
+}
+if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['upload_department'])) {
+        // Allowed mime types
+    $fileMimes = array(
+        'text/x-comma-separated-values',
+        'text/comma-separated-values',
+        'application/octet-stream',
+        'application/vnd.ms-excel',
+        'application/x-csv',
+        'text/x-csv',
+        'text/csv',
+        'application/csv',
+        'application/excel',
+        'application/vnd.msexcel',
+        'text/plain'
+    );
+
+    // Validate whether selected file is a CSV file
+    if (!empty($_FILES['departments']['name']) && in_array($_FILES['departments']['type'], $fileMimes)) {
+        // Open uploaded CSV file with read-only mode
+        $deptCvs = fopen($_FILES['departments']['tmp_name'], 'r');
+        // Skip the first line
+        fgetcsv($deptCvs);
+        // Parse data from CSV file line by line
+        while (($deptData = fgetcsv($deptCvs, 10000, ",")) !== FALSE) {
+            // Get row data
+            $department_code = $deptData[0];
+            $department_name = $deptData[1];
+
+            // If department already exists in the database with the same department name
+            $query = "SELECT * FROM departments WHERE department_name = '$department_name'";
+            $check = mysqli_query($conn, $query);
+            $row = mysqli_fetch_assoc($check);
+            if (mysqli_num_rows($check) > 0) {
+                $sql = "UPDATE departments SET department_code = '$department_code' WHERE department_name = '$department_name'";
+                if (mysqli_query($conn, $sql)) {
+                    $departments = "Departments successfully updated";
+                }
+            } else {
+                $sql = "INSERT INTO departments (department_name, department_code) VALUES('$department_name', '$department_code')";
+                if (mysqli_query($conn, $sql)) {
+                    $departments = "Departments successfully uploaded";
+                } else {
+                    $file_error = "Oops, an error occured";
+                }
+            }
+        }
+        // Close opened CSV file
+        fclose($deptCvs);
+    }
+    else
+    {
+        $file_error = "Please select valid file";
     }
 }
 ?>
@@ -53,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['single_department'])) 
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="index.php" class="logo d-flex align-items-center">
-            <img src="assets/img/logo.jpg" alt="">
+            <img src="assets/img/logo.jpg" alt="logo here">
             <span class="d-none d-lg-block">SIWES</span>
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -88,7 +130,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['single_department'])) 
             </li><!-- End Profile Nav -->
 
         </ul>
-    </nav><!-- End Icons Navigation -->
+    </nav>
+    <!-- End Icons Navigation -->
 
 </header><!-- End Header -->
 
@@ -220,13 +263,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['single_department'])) 
                     <div class="col-md-6">
                         <div class="card mb-3">
                             <div class="card-body">
-                                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
+                                <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST"
+                                    enctype="multipart/form-data">
                                     <div class="pt-4 pb-2">
                                         <h5 class="card-title text-center pb-0 fs-4">Upload all Departments</h5>
                                         <p class="text-warning text-center small">Allowed filetype is CSV</p>
                                     </div>
-                                    <span class="text-success"><?php ?></span>
-                                    <span class="text-danger"><?php ?></span>
+                                    <span class="text-success"><?php echo $departments; ?></span>
+                                    <span class="text-danger"><?php echo $file_error; ?></span>
                                     <div class="form-group mb-3">
                                         <label for="dptfile" class="form-label">Add Department File</label>
                                         <input type="file" class="form-control" name="departments" id="dptfile">
@@ -240,7 +284,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['single_department'])) 
                             </div>
                         </div>
                     </div>
-                </div><!-- End Left side columns -->
+                </div>
+                <!-- End Left side columns -->
             </div>
     </section>
 </main><!-- End #main -->

@@ -1,8 +1,11 @@
-<?php require_once './includes/header.php'; ?>
-<?php
-global $conn;
-?>
+<?php 
+require_once './includes/header.php'; 
+require_once './includes/functions.php';
 
+$department_count = mysqli_num_rows(getDepartments());
+$lecturer_count = mysqli_num_rows(getLecturers());
+$Student_count = mysqli_num_rows(getStudents());
+?>
 
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
@@ -154,7 +157,7 @@ global $conn;
                                         <i class="bi bi-houses"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>145</h6>
+                                        <h6><?php echo $department_count; ?></h6>
                                     </div>
                                 </div>
                             </div>
@@ -173,7 +176,7 @@ global $conn;
                                         <i class="bi bi-people"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>64</h6>
+                                        <h6><?php echo $lecturer_count; ?></h6>
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +196,7 @@ global $conn;
                                         <i class="text-secondary bi bi-people"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>800</h6>
+                                        <h6><?php echo $Student_count; ?></h6>
                                     </div>
                                 </div>
                             </div>
