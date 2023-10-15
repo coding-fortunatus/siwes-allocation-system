@@ -40,30 +40,46 @@
 </head>
 
 <body>
-
     <div class="container">
+        <div class="row">
+            <div class="bg-white p-3 pb-2 mb-3 col-md-10">
+                <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item fw-bold">Student</li>
+                        <li class="breadcrumb-item active" aria-current="page">Student Information</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-md-2">
+                <a href="./includes/logout.php" class="btn btn-outline-danger">Logout</a>
+            </div>
+        </div>
         <div class="main-body">
             <div class="row">
-                <div class="col-lg-4 mt-5">
+                <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
                                 <img src="./assets/img/profile-img.png" alt="Student Picture"
                                     class="rounded-circle p-1 bg-primary" width="200rem">
                                 <div class="mt-3">
-                                    <h4>John Doe</h4>
-                                    <p class="text-secondary mb-1">N/CS/21/0998</p>
-                                    <p class="text-secondary mb-1">example@gmail.com</p>
+                                    <h4>Sarah Allocations</h4>
+                                    <p class="text-secondary mb-3">N/CS/21/0998</p>
+                                    <p class="text-secondary mb-1">School of Pure and Applied Sciences</p>
+                                    <p class="text-secondary mb-3">Computer Science Department</p>
+                                    <hr>
                                     <p class="text-muted h5">Mr. John Akinode</p>
+                                    <div class="text-secondary">Supervisor</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-8 mt-5">
+                <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
                             <div class="row mb-3">
+                                <div class="card-header mb-3">SIWES Information</div>
                                 <div class="col-sm-3">
                                     <h6 class="mb-0">Company Name</h6>
                                 </div>
@@ -92,7 +108,7 @@
                                     <h6 class="mb-0">Front-Desk Number</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    <input type="text" class="form-control" placeholder="+234 908 2323 232">
+                                    <input type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="row mb-3">
