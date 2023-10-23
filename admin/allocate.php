@@ -1,5 +1,7 @@
 <?php 
-require_once './includes/header.php'; 
+require_once './includes/header.php';
+require_once './includes/functions.php';
+
 global $conn;
 
 $lecturerArray = $studentsArray = $msg = $failmsg ="";
@@ -9,8 +11,7 @@ $query = "SELECT matric_number FROM students";
 $result = mysqli_query($conn, $query);
 
 // Extract necessary datas from the lecturer data
-$lec_query = "SELECT * FROM lecturers";
-$lec_result = mysqli_query($conn, $lec_query);
+$lec_result = getLecturers();
 
 // Initialize an array to store the column values
 $studentsArray = array();
@@ -94,12 +95,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['generate'])) {
     }
     
 }
+
 // Fetch the allocation from the database if allocation has been done
-$query = 
-        "SELECT lecturer_allocation.id, lecturers.lecturer_name, lecturers.lecturer_code, lecturers.lec_status, lecturer_allocation.students
-        FROM lecturer_allocation
-        INNER JOIN lecturers ON lecturer_allocation.lecturer_id = lecturers.id";
-$results = mysqli_query($conn, $query);
+$results = getAllocations("lecturer_allocation", "lecturers");
+
+// Check for download button triggers and download the student allocations
+if (isset($_POST['export'])) {
+    download_Allocation("lecturer_allocation", "lecturers");
+}
+
 ?>
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
@@ -229,12 +233,22 @@ $results = mysqli_query($conn, $query);
                 <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                 <li class="breadcrumb-item active">Lecturer & Student Allocation</li>
             </ol>
-        </nav>
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
-            <div class="button-group">
-                <input type="submit" value="Generate Allocation" name="generate" class="btn btn-outline-primary">
+            <div class="text-center mb-2">
                 <span class="text-success"><?php echo $msg; ?></span>
                 <span class="text-danger"><?php echo $failmsg; ?></span>
+            </div>
+        </nav>
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+            <div class="row">
+                <div class="col-10">
+                    <input type="submit" value="Generate Allocation" name="generate" class="btn btn-outline-primary">
+                </div>
+                <div class="col">
+                    <button type="submit" value="Export" name="export" class="btn btn-success">
+                        <i class="bi bi-download"></i>
+                        <span class="visible">Export</span>
+                    </button>
+                </div>
             </div>
         </form>
     </div><!-- End Page Title -->

@@ -4,6 +4,10 @@ require_once './includes/functions.php';
 
 $departments = getDepartments();
 
+if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['confirm_delete'])) {
+    deleteData(2, "departments");
+}
+
 ?>
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
@@ -142,7 +146,7 @@ $departments = getDepartments();
         <div class="row">
 
             <!-- Left side columns -->
-            <div class="col-lg-12">
+            <div class="col-lg-12 card py-3">
                 <div class="row">
                     <table id="example" class="table table-striped" style="width:100%">
                         <thead>
@@ -150,9 +154,9 @@ $departments = getDepartments();
                                 <th style="width: 10px;">#</th>
                                 <th>Department Name</th>
                                 <th>Department Code</th>
-                                <th style="width: 30px;">Edit</th>
-                                <th style="width: 50px;">Delete</th>
-                                <th style="width: 50px;">action</th>
+                                <th style="width: 40px;">Edit</th>
+                                <th style="width: 80px;">Delete</th>
+                                <th style="width: 60px;">action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -162,8 +166,11 @@ $departments = getDepartments();
                                 <td>'.$department['id'].'</td>
                                 <td>'.$department['department_name'].'</td>
                                 <td>'.$department['department_code'].'</td>
-                                <td><a class="btn btn-outline-primary" href="departmemt.php?edit='.$department['id'].'">Edit</a></td>
-                                <td><a class="btn btn-outline-danger" href="departmemt.php?delete='.$department['id'].'">Delete</a></td>
+                                <td><button class=" disabled btn btn-outline-primary" href="departmemt.php?edit='.$department['id'].'"> <i class="fa fa-pencil"></i>
+                                </button></td>
+                                <td><button id="'.$department["id"].'" class="disabled btn btn-outline-danger" data-toggle="modal" data-target="#myModal">
+                                <i class="fa fa-trash fs-4"></i>
+                                </button></td>
                                 <td></td>
                             </tr>';
                             }
@@ -176,7 +183,38 @@ $departments = getDepartments();
             <!-- End Left side columns -->
         </div>
     </section>
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirm Delete</h4>
+                    <button type="button" class="btn close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body justify-contents-center align-items-center">
+                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+                        <p class="warning">Are you sure you want to delete?</p>
+                        <input type="submit" name="no" class="btn btn-success" value="No">
+                        <input type="submit" name="confirm_Delete" class="btn btn-danger" value="Yes">
+                    </form>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div> -->
+            </div>
+
+        </div>
+    </div>
 </main><!-- End #main -->
+<script>
+$(document).ready(function() {
+    $('button').click(function() {
+        $('#myModal').modal('show');
+    })
+})
+</script>
 <script>
 $(document).ready(function() {
     $('#example')

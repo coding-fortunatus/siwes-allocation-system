@@ -141,7 +141,7 @@ $lecturers = getLecturers();
         <div class="row">
 
             <!-- Left side columns -->
-            <div class="col-lg-12">
+            <div class="col-lg-12 card py-3">
                 <div class="row">
                     <table id="example" class="table table-striped" style="width:100%">
                         <thead>
@@ -150,8 +150,8 @@ $lecturers = getLecturers();
                                 <th>Lecturer Name</th>
                                 <th>Lecturer Code</th>
                                 <th>Lecturer Status</th>
-                                <th style="width: 30px;">Edit</th>
-                                <th style="width: 50px;">Delete</th>
+                                <th style="width: 50px;">Edit</th>
+                                <th style="width: 60px;">Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -162,8 +162,12 @@ $lecturers = getLecturers();
                                 <td>'.$lecturer['lecturer_name'].'</td>
                                 <td>'.$lecturer['lecturer_code'].'</td>
                                 <td>'.$lecturer['lec_status'].'</td>
-                                <td><a class="btn btn-outline-primary" href="departmemt.php?edit='.$lecturer['id'].'">Edit</a></td>
-                                <td><a class="btn btn-outline-danger" href="departmemt.php?delete='.$lecturer['id'].'">Delete</a></td>
+                                <td><a class="btn disabled btn-outline-primary" href="departmemt.php?edit='.$lecturer['id'].'">
+                                <i class="fa fa-pencil"></i>
+                                </a></td>
+                                <td><a class="btn disabled btn-outline-danger" href="departmemt.php?delete='.$lecturer['id'].'">
+                                <i class="fa fa-trash"></i>
+                                </a></td>
                             </tr>';
                             }
                                 

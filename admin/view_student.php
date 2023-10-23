@@ -141,7 +141,7 @@ $students = getStudents()
         <div class="row">
 
             <!-- Left side columns -->
-            <div class="col-lg-12">
+            <div class="col-lg-12 card py-3">
                 <div class="row">
                     <table id="example" class="table table-striped" style="width:100%">
                         <thead>
@@ -150,8 +150,8 @@ $students = getStudents()
                                 <th style="width: auto;">Matric Number</th>
                                 <th>Full Name</th>
                                 <th>Email</th>
-                                <th style="width: 30px;">Edit</th>
-                                <th style="width: 50px;">Delete</th>
+                                <th style="width: 50px;">Edit</th>
+                                <th style="width: 60px;">Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -162,8 +162,12 @@ $students = getStudents()
                                 <td>'.$student['matric_number'].'</td>
                                 <td>'.$student['fullname'].'</td>
                                 <td>'.$student['email'].'</td>
-                                <td><a class="btn btn-outline-primary" href="departmemt.php?edit='.$student['id'].'">Edit</a></td>
-                                <td><a class="btn btn-outline-danger" href="departmemt.php?delete='.$student['id'].'">Delete</a></td>
+                                <td><a class="btn disabled btn-outline-primary" href="departmemt.php?edit='.$student['id'].'">
+                                <i class="fa fa-pencil"></i>
+                                </a></td>
+                                <td><a class="btn disabled btn-outline-danger" href="departmemt.php?delete='.$student['id'].'">
+                                <i class="fa fa-trash"></i>
+                                </a></td>
                             </tr>';
                             }
                                 

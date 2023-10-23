@@ -19,3 +19,14 @@ body {
 .me-2 {
 	margin-right: 0.5rem !important;
 }
+
+.bg-overlay {
+	background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+		url("../img/school_logo.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+	color: #fff;
+	height: 100vh;
+	padding-top: 100vh;
+}
