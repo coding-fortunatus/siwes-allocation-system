@@ -3,18 +3,23 @@ require_once './includes/header.php';
 global $conn;
 
 $lecturerArray = $studentsArray = $msg = $failmsg ="";
+
 // extract matric_number from student data 
 $query = "SELECT matric_number FROM students";
 $result = mysqli_query($conn, $query);
+
 // Extract necessary datas from the lecturer data
 $lec_query = "SELECT * FROM lecturers";
 $lec_result = mysqli_query($conn, $lec_query);
+
 // Initialize an array to store the column values
 $studentsArray = array();
 $lecturerArray = array();
+
 // Create allocation array for the student lecturer allocation
 $lecturerAllocationArray = array();
 $lecturerAllocation = array();
+
 // Check if the query to fetch matric number was successful
 if ($result) {
     // Fetch each row and store the column value in an array
@@ -24,6 +29,7 @@ if ($result) {
     // Free the result set
     $result->free();
 }
+
 // Check if the query to fetch matric number was sucssessful
 if ($lec_result) {
     // fetch each row and store the column value in an array
@@ -33,17 +39,19 @@ if ($lec_result) {
     // free the result set
     $lec_result->free();
 }
+
 // Start the allocation procedures by checking for button clicked action
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['generate'])) {
+    
     // Create the allocation techniques
-    $number_of_students = count($studentsArray);
-    $number_of_lecturers = count($lecturerArray);
     $studentsPerLecturer = floor(count($studentsArray) / count($lecturerArray));
     $remainingStudents = (count($studentsArray) % count($lecturerArray));
     shuffle($studentsArray);
     $lecturerAllocationArray = array();
+
     foreach($lecturerArray as $lecturer) {
         $allocatedStudents = array_splice($studentsArray, 0, $studentsPerLecturer);
+
         // Store the allocation as associative array
         $allocationSubArray = array(
             "Lecturer" => $lecturer,
@@ -51,17 +59,18 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['generate'])) {
         );
         // Store all the data into another array
         $lecturerAllocationArray[] = $allocationSubArray;
-        // $additionalStudents = array_splice($studentsArray, 0, 1);
-        // $allocatedStudents = array_merge($allocatedStudents, $additionalStudents);
     }
+
     // allocate the remaining students from the student array after the general allocation
     for ($i=0; $i < $remainingStudents; $i++) { 
         array_push($lecturerAllocationArray[$i]['Students'], $studentsArray[$i]);
     }
+
     // To insert the lecturer allocation into database table
     foreach ($lecturerAllocationArray as $lecturerAllocation) {
         $lec = $lecturerAllocation['Lecturer'];
         $students = implode(" ", $lecturerAllocation['Students']);
+
         // Check if the user data already exists in the database
         $query = "SELECT * FROM lecturer_allocation WHERE lecturer_id = '$lec'";
         $result = mysqli_query($conn, $query);
@@ -73,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['generate'])) {
                 $failmsg = "Oops, an error occur while updating student allocation";
             }
         } else {
+            
             // Insert data into the database if not exists
             $sql = "INSERT INTO lecturer_allocation(lecturer_id, students)VALUES($lec, '$students')";
             if (mysqli_query($conn, $sql)) {
@@ -86,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['generate'])) {
 }
 // Fetch the allocation from the database if allocation has been done
 $query = 
-        "SELECT lecturer_allocation.id, lecturers.lecturer_name, lecturers.lecturer_code, lecturer_allocation.students
+        "SELECT lecturer_allocation.id, lecturers.lecturer_name, lecturers.lecturer_code, lecturers.lec_status, lecturer_allocation.students
         FROM lecturer_allocation
         INNER JOIN lecturers ON lecturer_allocation.lecturer_id = lecturers.id";
 $results = mysqli_query($conn, $query);
@@ -235,35 +245,66 @@ $results = mysqli_query($conn, $query);
             <!-- Left side columns -->
             <div class="col-lg-12">
                 <div class="row">
-                    <table id="example" class="table table-striped" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th style="width: 60px;">Code</th>
-                                <th>Lecturer Name</th>
-                                <th>Lecturer Status</th>
-                                <th>Allocated Students</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php                            
+                    <div class="card shadow py-3">
+                        <table id="example" class="table table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px;">Code</th>
+                                    <th>Lecturer Name</th>
+                                    <th>Lecturer Status</th>
+                                    <th>Allocated Students</th>
+                                    <th style="width: 10px;"></th>
+                                    <th style="width: 10px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php                            
                             if (mysqli_num_rows($results) > 0) {
                                 while ($row = mysqli_fetch_assoc($results)) {
                                     
                                     echo ' <tr>
-                                    <td>'.$row['id'].'</td>
+                                    <td>'.$row['lecturer_code'].'</td>
                                     <td>'.$row['lecturer_name'].'</td>
-                                    <td>'.$row['lecturer_code'].'</td>';
-                                    echo '<td>'.$row['students'].'</td>
+                                    <td>'.$row['lec_status'].'</td>
+                                    <td>'.$row['students'].'</td>
+                                    <td></td>
+                                    <td></td>
                                     </tr>';
                                 }
                             }
                             ?>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <!-- End Left side columns -->
         </div>
     </section>
 </main><!-- End #main -->
+<script>
+$(document).ready(function() {
+    $('#example')
+        .DataTable({
+            //disable sorting on last column      
+            "columnDefs": [{
+                "orderable": false,
+                "targets": 5
+            }],
+            language: {
+                //customize pagination prev and next buttons: use arrows instead of words        
+                'paginate': {
+                    'previous': '<span class="fa fa-chevron-left"></span>',
+                    'next': '<span class="fa fa-chevron-right"></span>'
+                },
+                //customize number of elements to be displayed        
+                "lengthMenu": 'Display <select class="form-control input-sm">' +
+                    '<option value="10">10</option>' + '<option value="20">20</option>' +
+                    '<option value="30">30</option>' + '<option value="40">40</option>' +
+                    '<option value="50">50</option>' + '<option value="-1">All</option>' +
+                    '</select> results'
+            }
+        })
+});
+</script>
 <?php require_once './includes/footer.php'; ?>
