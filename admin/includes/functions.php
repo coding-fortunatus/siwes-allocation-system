@@ -77,4 +77,61 @@
         exit;
     }
 
+    function getAllocatedStudents($lecturer_id) {
+        global $conn;
+
+        $sql = "SELECT students FROM lecturer_allocation WHERE lecturer_id = '$lecturer_id'";
+        $student = mysqli_fetch_assoc(mysqli_query($conn, $sql));
+        
+        $allStudents = explode(" ", $student['students']);
+        return $allStudents;
+    }
+
+    function getStudentsByMatNumber() {
+        global $conn;
+
+        $students = getAllocatedStudents($_SESSION['lecturer_id']);
+        $student_data = [];
+        foreach($students as $student) {
+            $query = "SELECT id, matric_number, fullname, email FROM students WHERE matric_number = '$student'";
+            $details = mysqli_query($conn, $query);
+            array_push($student_data, $details);
+        }
+        return $student_data;
+    }
+
+    function getSiwesDetails($lecturer_id, $student_id) {
+        
+        global $conn;
+
+        $sql = "SELECT * FROM students_siwes_details 
+                WHERE supervisor_id = '$lecturer_id' AND student_id = '$student_id'";
+        $result = mysqli_fetch_assoc(mysqli_query($conn, $sql));
+        return $result;
+    }
+
+    function getStudentsById($student_id) {
+        global $conn;
+
+        $sql = "SELECT * FROM students 
+                WHERE id = '$student_id'";
+        $result = mysqli_fetch_assoc(mysqli_query($conn, $sql));
+        return $result;
+    }
+
+    function getPlacementStatus($s_id) {
+        
+        global $conn;
+        
+        $sql = "SELECT * FROM students_siwes_details WHERE student_id = '$s_id'";
+        $result = mysqli_query($conn, $sql);
+
+        if (mysqli_num_rows($result) > 0 && mysqli_num_rows($result) == 1) {
+            return "Placed";
+        } else {
+            return "Not Placed";
+        }
+        
+    }
+
 ?>

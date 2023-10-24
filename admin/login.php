@@ -29,7 +29,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])){
     // Validate credentials
     if(empty($username_error) && empty($password_error)){
         // Prepare a select statement
-        $sql = "SELECT id, matric_number, passwords FROM students WHERE matric_number = ?";
+        $sql = "SELECT id, lecturer_id, username, user_role, password FROM users WHERE username = ?";
         if($stmt = mysqli_prepare($conn, $sql)){
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "s", $username);            
@@ -40,15 +40,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])){
                 // Check if username exists, if yes then verify password
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
+                    mysqli_stmt_bind_result($stmt, $id, $lecturer_id, $username, $user_role, $hashed_password);
                     if(mysqli_stmt_fetch($stmt)){
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
                             session_start();
                             // Store data in session variables
                             $_SESSION["loggin"] = true;
-                            $_SESSION["matric_number"] = $username;
-                            $_SESSION['id'] = $id;                           
+                            $_SESSION["username"] = $username;
+                            $_SESSION['lecturer_id'] = $lecturer_id;
+                            $_SESSION['user_role'] = $user_role;                          
                             
                             // Redirect user to welcome page
                             header("Location: index.php");
@@ -79,7 +80,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])){
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Admin / Login - Siwes Allocation System</title>
+    <title>Admin / Lecturer Login - Siwes Allocation System</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -113,20 +114,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])){
                 class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
                 <div class="container">
                     <div class="row justify-content-center">
-                        <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-                            <div class="d-flex justify-content-center py-4">
-                                <a href="index.html" class="logo d-flex align-items-center w-auto">
-                                    <img src="assets/img/logo.jpg" alt="">
-                                    <span class="d-none d-lg-block">SIWES</span>
-                                </a>
-                            </div>
+                        <div class="d-flex justify-content-center py-4">
+                            <h2 href="in" class="align-items-center w-auto">
+                                <span class="d-none d-lg-block text-primary">SIWES SUPERVISOR ALLOCATION SYSTEM</span>
+                            </h2>
+                        </div>
+                        <div class="col-lg-5 col-md-6 d-flex flex-column align-items-center justify-content-center">
                             <!-- End Logo -->
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="pt-4 pb-2">
-                                        <h5 class="card-title text-center pb-0 fs-4">Admin Login</h5>
+                                        <h5 class="card-title text-center pb-0 fs-4">Admin / Lecturer Login</h5>
                                         <p class="text-center small">Enter your username & password to login</p>
                                     </div>
+                                    <span class="text-danger"><?php echo $login_err; ?></span>
                                     <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>"
                                         method="POST">
                                         <div class=" col-12">
@@ -148,27 +149,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])){
                                             <input class="btn btn-primary w-100" type="submit" name="login"
                                                 value="Login">
                                         </div>
-                                        <!-- <div class="col-12">
-                                            <p class="small mb-0">Don't have account?
-                                                <a href="register.php">Create an account</a>
-                                            </p>
-                                        </div> -->
                                     </form>
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </section>
-
         </div>
     </main><!-- End #main -->
-
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
-
     <!-- Vendor JS Files -->
     <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

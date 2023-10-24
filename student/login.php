@@ -79,7 +79,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])){
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Student / Login - Siwes Allocation System</title>
+    <title>Student Login - Siwes Allocation System</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -111,8 +111,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])){
         <div class="container">
             <section
                 class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-                <div class="container ">
-                    <div class="row justify-content-center text-center">
+                <div class="container">
+                    <div class="row justify-content-center">
                         <div class="d-flex justify-content-center py-4">
                             <h2 href="in" class="align-items-center w-auto">
                                 <span class="d-none d-lg-block text-primary">SIWES SUPERVISOR ALLOCATION SYSTEM</span>
@@ -126,7 +126,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])){
                                         <h5 class="card-title text-center pb-0 fs-4">Student Login</h5>
                                         <p class="text-center small">Enter your username & password to login</p>
                                     </div>
-                                    <form class="row g-2" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>"
+                                    <form class="row g-3" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>"
                                         method="POST">
                                         <div class="col-12">
                                             <label for="yourUsername" class="form-label">Matric Number</label>
@@ -134,15 +134,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])){
                                                 <span class="input-group-text" id="inputGroupPrepend">@</span>
                                                 <input type="text" name="username" class="form-control"
                                                     id="yourUsername">
-                                                <span class="text-danger"><?php echo $username_error; ?></span>
                                             </div>
+                                            <span class="text-danger"><?php echo $username_error; ?></span>
                                         </div>
                                         <div class="col-12">
                                             <label for="yourPassword" class="form-label">Password</label>
                                             <input type="password" name="password" class="form-control"
                                                 id="yourPassword">
-                                            <span class="text-danger"><?php echo $password_error; ?></span>
                                         </div>
+                                        <span class="text-danger"><?php echo $password_error; ?></span>
                                         <div class="col-12">
                                             <input class="btn btn-primary w-100" type="submit" name="login"
                                                 value="Login">
